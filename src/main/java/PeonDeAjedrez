@@ -1,0 +1,88 @@
+public class PeonDeAjedrez {
+
+    // Atributos básicos
+    private String color; // "blanco" o "negro"
+    private int columna; // Columna (1 a 8)
+    private int fila;    // Fila (1 a 8)
+
+    // Constructor
+    public Peon(String color, int columna, int fila) {
+        if (!color.equals("blanco") && !color.equals("negro")) {
+            throw new IllegalArgumentException("El color debe ser 'blanco' o 'negro'.");
+        }
+        if (columna < 1 || columna > 8 || fila < 1 || fila > 8) {
+            throw new IllegalArgumentException("La posición debe estar entre 1 y 8.");
+        }
+        this.color = color;
+        this.columna = columna;
+        this.fila = fila;
+    }
+
+    // Métodos de acceso
+    public String getColor() {
+        return color;
+    }
+
+    public int getColumna() {
+        return columna;
+    }
+
+    public int getFila() {
+        return fila;
+    }
+
+    // Movimiento básico del peón
+    public boolean mover(int nuevaColumna, int nuevaFila) {
+        int direccion = color.equals("blanco") ? 1 : -1;
+
+        // Movimiento hacia adelante (una casilla)
+        if (nuevaColumna == columna && nuevaFila == fila + direccion) {
+            fila = nuevaFila;
+            return true;
+        }
+
+        // Movimiento inicial de dos casillas hacia adelante
+        if (nuevaColumna == columna &&
+            ((color.equals("blanco") && fila == 2 && nuevaFila == fila + 2) ||
+             (color.equals("negro") && fila == 7 && nuevaFila == fila - 2))) {
+            fila = nuevaFila;
+            return true;
+        }
+
+        // Movimiento diagonal (captura simulada)
+        if (Math.abs(nuevaColumna - columna) == 1 && nuevaFila == fila + direccion) {
+            columna = nuevaColumna;
+            fila = nuevaFila;
+            return true;
+        }
+
+        // Movimiento no válido
+        return false;
+    }
+
+    // Representación en texto
+    @Override
+    public String toString() {
+        return "Peon{" +
+                "color='" + color + '\'' +
+                ", columna=" + columna +
+                ", fila=" + fila +
+                '}';
+    }
+
+    // Método principal para probar la clase
+    public static void main(String[] args) {
+        Peon peonBlanco = new Peon("blanco", 4, 2);
+        System.out.println(peonBlanco);
+
+        // Intentar movimientos
+        System.out.println("Mover hacia adelante: " + peonBlanco.mover(4, 3)); // true
+        System.out.println(peonBlanco);
+
+        System.out.println("Mover dos casillas hacia adelante: " + peonBlanco.mover(4, 5)); // false
+        System.out.println(peonBlanco);
+
+        System.out.println("Mover en diagonal (captura simulada): " + peonBlanco.mover(5, 4)); // true
+        System.out.println(peonBlanco);
+    }
+}
