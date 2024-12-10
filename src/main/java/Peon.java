@@ -1,12 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+public class Peon extends Pieza{
 
-/**
- *
- * @author OnurEsShamaN
- */
-public class Peon {
-    
+    public Peon(int color, int columna, int fila){
+        super(color, columna, fila);
+
+        if(color == GUI.BLANCO){
+            imagen = getImagen("/sprites/peonBlanco");
+        }else if(color == GUI.NEGRO){
+            imagen = getImagen("/sprites/peonNegro");
+        }
+    }
 }

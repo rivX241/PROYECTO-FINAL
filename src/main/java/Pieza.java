@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
@@ -12,7 +13,7 @@ public class Pieza {
         this.columna = columna;
         this.fila = fila;
         x = posicionX(columna);
-        y = posicionY(columna);
+        y = posicionY(fila);
         columnaPrevia = columna;
         filaPrevia = fila;
     }
@@ -31,5 +32,9 @@ public class Pieza {
     }
     public int posicionY(int fila){
         return fila * Tablero.TAMANO_CUADRADO;
+    }
+
+    public void dibujar(Graphics2D g2){
+        g2.drawImage(imagen,x,y,Tablero.TAMANO_CUADRADO,Tablero.TAMANO_CUADRADO,null);
     }
 }
