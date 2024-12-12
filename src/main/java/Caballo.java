@@ -9,4 +9,15 @@ public class Caballo extends Pieza{
             imagen = getImagen("/sprites/caballoNegro");
         }
     }
+
+    public boolean moverse(int columnaObjetivo,int filaObjetivo){
+        if(dentroTablero(columnaObjetivo,filaObjetivo)){
+            if(Math.abs(columnaObjetivo-columnaPrevia)*Math.abs(filaObjetivo-filaPrevia) == 2){
+                if(cuadradoValido(columnaObjetivo,filaObjetivo)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

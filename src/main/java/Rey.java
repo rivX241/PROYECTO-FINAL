@@ -4,7 +4,7 @@ public class Rey extends Pieza{
         super(color,columna,fila);
 
         if(color == GUI.BLANCO){
-            imagen = getImagen("/sprites/reyBlanco");
+            imagen = getImagen("/sprites/reyBlanco");   
         }else if(color == GUI.NEGRO){
             imagen = getImagen("/sprites/reyNegro");
         }

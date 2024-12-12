@@ -8,6 +8,7 @@ public class Pieza {
     public int columna,fila,columnaPrevia,filaPrevia;
     public int color;
     public Pieza chocaPieza;
+
     public Pieza(int color, int columna,int fila) {
         this.color = color;
         this.columna = columna;
@@ -74,7 +75,7 @@ public class Pieza {
         y = posicionY(fila);
     }
 
-    public Pieza chocaPieza(int columnaObjetivo, int filaObjetivo){
+    public Pieza getChocaPieza(int columnaObjetivo, int filaObjetivo){
         for(Pieza pieza : GUI.sPiezas){
             if(pieza.columna == columnaObjetivo && pieza.fila == filaObjetivo && pieza != this){
                 return pieza;
@@ -84,7 +85,7 @@ public class Pieza {
     }
 
     public boolean cuadradoValido(int columnaObjetivo, int filaObjetivo){
-        chocaPieza = chocaPieza(columnaObjetivo, filaObjetivo);
+        chocaPieza = getChocaPieza(columnaObjetivo, filaObjetivo);
         if(chocaPieza == null){
             return true;
         }else{
