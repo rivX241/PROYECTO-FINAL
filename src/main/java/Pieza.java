@@ -7,7 +7,7 @@ public class Pieza {
     public int x, y;
     public int columna,fila,columnaPrevia,filaPrevia;
     public int color;
-
+    public Pieza chocaPieza;
     public Pieza(int color, int columna,int fila) {
         this.color = color;
         this.columna = columna;
@@ -32,6 +32,69 @@ public class Pieza {
     }
     public int posicionY(int fila){
         return fila * Tablero.TAMANO_CUADRADO;
+    }
+
+    public int getColumna(int x){
+        return (x + Tablero.MITAD_CUADRADO)/Tablero.TAMANO_CUADRADO;
+    }
+    public int getFila(int y){
+        return (y + Tablero.MITAD_CUADRADO)/Tablero.TAMANO_CUADRADO;
+    }
+    public int getIndice(){
+        for(int indice = 0; indice < GUI.sPiezas.size(); indice++){
+            if(GUI.sPiezas.get(indice) == this){
+                return indice;
+            }
+        }
+        return 0;
+    }
+    public void actualizarPosicion(){
+
+        x= posicionX(columna);
+        y= posicionY(fila);
+        columnaPrevia = getColumna(x);
+        filaPrevia = getFila(y);
+    }
+
+    public boolean moverse(int columnaObjetivo, int filaObjetivo){
+        return false;
+    }
+
+    public boolean dentroTablero(int columnaObjetivo, int filaObjetivo){
+        if(columnaObjetivo >= 0 && columnaObjetivo <=7 && filaObjetivo >= 0 && filaObjetivo <=7){
+            return true;
+        }
+        return false;
+    }
+
+    public void reiniciarPosicion(){
+        columna = columnaPrevia;
+        fila = filaPrevia;
+        x = posicionX(columna);
+        y = posicionY(fila);
+    }
+
+    public Pieza chocaPieza(int columnaObjetivo, int filaObjetivo){
+        for(Pieza pieza : GUI.sPiezas){
+            if(pieza.columna == columnaObjetivo && pieza.fila == filaObjetivo && pieza != this){
+                return pieza;
+            }
+        }
+        return null;
+    }
+
+    public boolean cuadradoValido(int columnaObjetivo, int filaObjetivo){
+        chocaPieza = chocaPieza(columnaObjetivo, filaObjetivo);
+        if(chocaPieza == null){
+            return true;
+        }else{
+            if(chocaPieza.color != this.color){
+                return true;
+            }else{
+                chocaPieza =null;
+            }
+        }
+        return false;
     }
 
     public void dibujar(Graphics2D g2){
