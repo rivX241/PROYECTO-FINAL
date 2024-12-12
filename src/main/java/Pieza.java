@@ -100,4 +100,11 @@ public class Pieza {
     public void dibujar(Graphics2D g2){
         g2.drawImage(imagen,x,y,Tablero.TAMANO_CUADRADO,Tablero.TAMANO_CUADRADO,null);
     }
+    /*Verificar si la pieza esta en la tabla */
+    public boolean enLaTabla(int columnOnj, int filaObj){
+        if(columnOnj >= 0 && filaObj <= 7 && filaObj >= 0 && filaObj <= 7){
+            return true;
+        }
+        return false;
+    }
 }
