@@ -9,4 +9,17 @@ public class Rey extends Pieza{
             imagen = getImagen("/sprites/reyNegro");
         }
     }
+
+    @Override
+    public boolean moverse(int columnaObjetivo, int filaObjetivo) {
+        if(dentroTablero(columnaObjetivo,filaObjetivo)){
+            if(Math.abs(columnaObjetivo-columnaPrevia)+ Math.abs(filaObjetivo-filaPrevia) == 1
+                || Math.abs(columnaObjetivo-columnaPrevia) * Math.abs(filaObjetivo-filaPrevia) == 1){
+                if(cuadradoValido(columnaObjetivo,filaObjetivo)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
