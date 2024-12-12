@@ -9,31 +9,85 @@ public class GUI extends JPanel implements Runnable{
     final int FPS = 60;
     Thread gameThread;
     Tablero tablero = new Tablero();
-
+    Mouse mouse = new Mouse();
     //piezas
     public static ArrayList<Pieza> piezas = new ArrayList<>();
     public static ArrayList<Pieza> sPiezas = new ArrayList<>();
-
+    Pieza piezaActiva;
     //Colores
     public static final int BLANCO = 0;
     public static final int NEGRO = 1;
     int colorActual = BLANCO;
 
+    //posiciones válidas
+    boolean moverse;
+    boolean esValido;
 
     public GUI() {
         setPreferredSize(new Dimension(ANCHO, ALTO));
         setBackground(Color.black);
+        addMouseMotionListener(mouse);
+        addMouseListener(mouse);
 
         configurarPiezas();
         copiarPiezas(piezas,sPiezas);
-    }
-    private void actualizar(){
 
     }
+    private void actualizar(){
+        if(mouse.presionado){
+            if(piezaActiva == null){
+
+                for(Pieza pieza : sPiezas){
+                    if(pieza.color == colorActual && pieza.columna == mouse.x/Tablero.TAMANO_CUADRADO &&
+                        pieza.fila == mouse.y/Tablero.TAMANO_CUADRADO){
+                        piezaActiva = pieza;
+                    }
+                }
+            }else{
+                simular();
+            }
+        }
+
+        if(!mouse.presionado){
+            if(piezaActiva != null){
+                if(esValido){
+                    copiarPiezas(sPiezas,piezas);
+                    piezaActiva.actualizarPosicion();
+                }else{
+                    copiarPiezas(piezas,sPiezas);
+                    piezaActiva.reiniciarPosicion();
+                    piezaActiva = null;
+                }
+            }
+        }
+    }
+    private void simular(){
+
+         moverse = false;
+         esValido = false;
+
+         copiarPiezas(piezas,sPiezas);
+
+         piezaActiva.x = mouse.x - Tablero.MITAD_CUADRADO;
+         piezaActiva.y = mouse.y - Tablero.MITAD_CUADRADO;
+         piezaActiva.columna = piezaActiva.getColumna(piezaActiva.x);
+         piezaActiva.fila = piezaActiva.getFila(piezaActiva.y);
+         if(piezaActiva.moverse(piezaActiva.columna, piezaActiva.fila)){
+             moverse = true;
+
+             if(piezaActiva.chocaPieza != null){
+                 sPiezas.remove(piezaActiva.chocaPieza.getIndice());
+             }
+             esValido = true;
+         }
+
+    }
+
     public void lanzarJuego(){
         gameThread = new Thread(this);
         gameThread.start();
     }
+
     private void copiarPiezas(ArrayList<Pieza> recurso,ArrayList<Pieza> objetivo){
         objetivo.clear();
 
@@ -49,6 +103,18 @@ public class GUI extends JPanel implements Runnable{
         tablero.draw(g2);
         for(Pieza p : sPiezas){
             p.dibujar(g2);
+        }
+        if(piezaActiva != null){
+            if(moverse){
+                g2.setColor(Color.white);
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.65f));
+                g2.fillRect(piezaActiva.columna*Tablero.TAMANO_CUADRADO,
+                        piezaActiva.fila*Tablero.TAMANO_CUADRADO
+                        ,Tablero.TAMANO_CUADRADO,Tablero.TAMANO_CUADRADO);
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+            }
+            piezaActiva.dibujar(g2);
         }
     }
 
