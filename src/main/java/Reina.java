@@ -9,4 +9,9 @@ public class Reina extends Pieza{
             imagen = getImagen("/sprites/reinaNegra");
         }
     }
+    public puedeMoverse(int columnaObjetivo, int filaObjetivo) {
+        if(dentroTablero(columnaObjetivo, filaObjetivo) && esElMismoCuadrado(columnaObjetivo, filaObjetivo) == false) {
+            
+        }
+    }
 }

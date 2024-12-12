@@ -84,6 +84,13 @@ public class Pieza {
         return null;
     }
 
+    public boolean esElMismoCuadrado(int columnaObjetivo, int filaObjetivo) {
+        if(filaObjetivo == columnaPrevia && filaObjetivo == filaPrevia) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean cuadradoValido(int columnaObjetivo, int filaObjetivo){
         chocaPieza = getChocaPieza(columnaObjetivo, filaObjetivo);
         if(chocaPieza == null){
