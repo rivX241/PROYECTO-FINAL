@@ -27,7 +27,9 @@ public class GUI extends JPanel implements Runnable{
     boolean moverse;
     boolean esValido;
     boolean promover;
+    boolean tablas;
     boolean juegoTerminado;
+
 
     public GUI() {
         setPreferredSize(new Dimension(ANCHO, ALTO));
@@ -42,7 +44,7 @@ public class GUI extends JPanel implements Runnable{
 
         if(promover){
             promocion();
-        }else if(!juegoTerminado){
+        }else if(!juegoTerminado && !tablas){
             //Selección de la pieza activa según el clic del ratón
             if(mouse.presionado){
                 if(piezaActiva == null){
@@ -69,6 +71,8 @@ public class GUI extends JPanel implements Runnable{
                         }
                         if(reyEnJaque() && esJaqueMate()){
                             juegoTerminado = true;
+                        }else if(tablas && !reyEnJaque()){
+                            tablas = true;
                         }else{
                             if(promoverPieza()){
                                 promover = true;
@@ -349,6 +353,11 @@ public class GUI extends JPanel implements Runnable{
 
             g2.drawString(s,200,430);
         }
+        if (tablas) {
+            g2.setFont(new Font("Arial",Font.BOLD,100));
+            g2.setColor(Color.lightGray);
+            g2.drawString("Tablas",200,430);
+        }
     }
 
     private void promocion(){
@@ -469,6 +478,23 @@ public class GUI extends JPanel implements Runnable{
             }
         }
         return rey;
+    }
+
+    private boolean tablas(){
+        int count = 0;
+
+        for(Pieza pieza : sPiezas){
+            if(pieza.color != colorActual){
+                count++;
+            }
+        }
+
+        if(count == 1){
+            if(!reyPuedeMoverse(getRey(true))){
+                return true;
+            }
+        }
+        return false;
     }
     public void configurarPiezas() {
         piezas.add(new Peon(BLANCO, 0, 6));
