@@ -8,6 +8,7 @@ public class Pieza {
     public int columna,fila,columnaPrevia,filaPrevia;
     public int color;
     public Pieza chocaPieza;
+    public boolean mover;
 
     public Pieza(int color, int columna,int fila) {
         this.color = color;
@@ -55,6 +56,7 @@ public class Pieza {
         y= posicionY(fila);
         columnaPrevia = getColumna(x);
         filaPrevia = getFila(y);
+        mover = true;
     }
 
     public boolean moverse(int columnaObjetivo, int filaObjetivo){
