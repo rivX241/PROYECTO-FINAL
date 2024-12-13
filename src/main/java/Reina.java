@@ -10,11 +10,11 @@ public class Reina extends Pieza{
         }
     }
     public boolean puedeMoverse(int columnaObjetivo, int filaObjetivo) {
-        if(dentroTablero(columnaObjetivo, filaObjetivo) && esElMismoCuadrado(columnaObjetivo, filaObjetivo) == false) {
+        if(dentroTablero(columnaObjetivo, filaObjetivo) && !esElMismoCuadrado(columnaObjetivo, filaObjetivo)) {
 
             //Vertical y horizontal}
             if(columnaObjetivo == columnaPrevia || filaObjetivo == filaPrevia) {
-                if(cuadradoValido(columnaObjetivo, filaObjetivo) && piezaEstaEnRecta(columnaObjetivo, filaObjetivo) == false) {
+                if(cuadradoValido(columnaObjetivo, filaObjetivo) && !piezaEstaEnRecta(columnaObjetivo, filaObjetivo)) {
                     return true;
                 }
             }
@@ -22,7 +22,7 @@ public class Reina extends Pieza{
 
             //Diagonal
             if(Math.abs(columnaObjetivo - columnaPrevia) == Math.abs(filaObjetivo - columnaPrevia)) {
-                if(cuadradoValido(columnaObjetivo, filaObjetivo) && piezaEstaEnDiagonal(columnaObjetivo, filaObjetivo) == false) {
+                if(cuadradoValido(columnaObjetivo, filaObjetivo) && !piezaEstaEnDiagonal(columnaObjetivo, filaObjetivo)) {
                     return true;
                 }
             }

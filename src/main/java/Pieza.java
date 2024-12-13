@@ -59,7 +59,7 @@ public class Pieza {
         mover = true;
     }
 
-    public boolean moverse(int columnaObjetivo, int filaObjetivo){
+    public boolean puedeMoverse(int columnaObjetivo, int filaObjetivo){
         return false;
     }
 

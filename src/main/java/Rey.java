@@ -11,7 +11,7 @@ public class Rey extends Pieza{
     }
 
     @Override
-    public boolean moverse(int columnaObjetivo, int filaObjetivo) {
+    public boolean puedeMoverse(int columnaObjetivo, int filaObjetivo) {
         if(dentroTablero(columnaObjetivo,filaObjetivo)){
             if(Math.abs(columnaObjetivo-columnaPrevia)+ Math.abs(filaObjetivo-filaPrevia) == 1
                 || Math.abs(columnaObjetivo-columnaPrevia) * Math.abs(filaObjetivo-filaPrevia) == 1){
