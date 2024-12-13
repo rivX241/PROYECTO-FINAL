@@ -13,6 +13,8 @@ public class GUI extends JPanel implements Runnable{
     //piezas
     public static ArrayList<Pieza> piezas = new ArrayList<>();
     public static ArrayList<Pieza> sPiezas = new ArrayList<>();
+    ArrayList<Pieza> piezasPromociones = new ArrayList<>();
+
     Pieza piezaActiva;
     public static Pieza pEnroque;
 
@@ -24,6 +26,7 @@ public class GUI extends JPanel implements Runnable{
     //posiciones válidas
     boolean moverse;
     boolean esValido;
+    boolean promover;
 
     public GUI() {
         setPreferredSize(new Dimension(ANCHO, ALTO));
@@ -35,39 +38,49 @@ public class GUI extends JPanel implements Runnable{
         copiarPiezas(piezas,sPiezas);
     }
     private void actualizar(){
-        //Selección de la pieza activa según el clic del ratón
-        if(mouse.presionado){
-            if(piezaActiva == null){
 
-                for(Pieza pieza : sPiezas){
-                    if(pieza.color == colorActual && pieza.columna == mouse.x/Tablero.TAMANO_CUADRADO &&
-                        pieza.fila == mouse.y/Tablero.TAMANO_CUADRADO){
-                        piezaActiva = pieza;//Activar pieza seleccionada
+        if(promover){
+            promocion();
+        }else{
+            //Selección de la pieza activa según el clic del ratón
+            if(mouse.presionado){
+                if(piezaActiva == null){
+
+                    for(Pieza pieza : sPiezas){
+                        if(pieza.color == colorActual && pieza.columna == mouse.x/Tablero.TAMANO_CUADRADO &&
+                                pieza.fila == mouse.y/Tablero.TAMANO_CUADRADO){
+                            piezaActiva = pieza;//Activar pieza seleccionada
+                        }
                     }
-                }
-            }else{
-                //Simula el movimiento de la pieza activa
-                simular();
-            }
-        }
-        //Si el movimiento es válido, actualiza la posición de las piezas
-        if(!mouse.presionado){
-            if(piezaActiva != null){
-                if(esValido){
-                    copiarPiezas(sPiezas,piezas);
-                    piezaActiva.actualizarPosicion();
-                    if(pEnroque != null){
-                        pEnroque.actualizarPosicion();
-                    }
-                    cambioJugador();
                 }else{
-                    //Si el movimiento no es válido, restablece la posición original
-                    copiarPiezas(piezas,sPiezas);
-                    piezaActiva.reiniciarPosicion();
-                    piezaActiva = null;
+                    //Simula el movimiento de la pieza activa
+                    simular();
+                }
+            }
+            //Si el movimiento es válido, actualiza la posición de las piezas
+            if(!mouse.presionado){
+                if(piezaActiva != null){
+                    if(esValido){
+                        copiarPiezas(sPiezas,piezas);
+                        piezaActiva.actualizarPosicion();
+                        if(pEnroque != null){
+                            pEnroque.actualizarPosicion();
+                        }
+                        if(promoverPieza()){
+                            promover = true;
+                        }else{
+                            cambioJugador();
+                        }
+                    }else{
+                        //Si el movimiento no es válido, restablece la posición original
+                        copiarPiezas(piezas,sPiezas);
+                        piezaActiva.reiniciarPosicion();
+                        piezaActiva = null;
+                    }
                 }
             }
         }
+
     }
 
     private void cambioJugador(){
@@ -118,8 +131,9 @@ public class GUI extends JPanel implements Runnable{
             }
 
             revisarEnroque();   //Verifica si se puede hacer enroque
-
-            esValido = true;    //El movimiento es válido
+            if(esIlegal(piezaActiva) == false){  //Verifica si el rey hace un movimiento ilegal
+                esValido = true;   //El movimiento es válido
+            }
         }
     }
 
@@ -146,12 +160,22 @@ public class GUI extends JPanel implements Runnable{
         }
         if(piezaActiva != null){
             if(moverse){
-                g2.setColor(Color.white);
-                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.65f));
-                g2.fillRect(piezaActiva.columna*Tablero.TAMANO_CUADRADO,
-                        piezaActiva.fila*Tablero.TAMANO_CUADRADO
-                        ,Tablero.TAMANO_CUADRADO,Tablero.TAMANO_CUADRADO);
-                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+                if(esIlegal(piezaActiva)){
+                    g2.setColor(Color.gray);
+                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.65f));
+                    g2.fillRect(piezaActiva.columna*Tablero.TAMANO_CUADRADO,
+                            piezaActiva.fila*Tablero.TAMANO_CUADRADO
+                            ,Tablero.TAMANO_CUADRADO,Tablero.TAMANO_CUADRADO);
+                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+                }else{
+                    g2.setColor(Color.white);
+                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.65f));
+                    g2.fillRect(piezaActiva.columna*Tablero.TAMANO_CUADRADO,
+                            piezaActiva.fila*Tablero.TAMANO_CUADRADO
+                            ,Tablero.TAMANO_CUADRADO,Tablero.TAMANO_CUADRADO);
+                    g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+                }
+
 
             }
             piezaActiva.dibujar(g2);
@@ -161,13 +185,53 @@ public class GUI extends JPanel implements Runnable{
         g2.setFont(new Font("Arial",Font.BOLD,35));
         g2.setColor(Color.white);
 
-        if(colorActual == BLANCO){
-            g2.drawString("Turno:Blancas",840,550);
+        if(promover){
+            g2.drawString("Promover a:", 840,150);
+            for(Pieza pieza : piezasPromociones){
+                g2.drawImage(pieza.imagen,pieza.posicionX(pieza.columna),pieza.posicionY(pieza.fila),
+                        Tablero.TAMANO_CUADRADO,Tablero.TAMANO_CUADRADO,null);
+            }
         }else{
-            g2.drawString("Turno:Negras",840,250);
+            if(colorActual == BLANCO){
+                g2.drawString("Turno:Blancas",840,550);
+            }else{
+                g2.drawString("Turno:Negras",840,250);
+            }
+        }
+
+    }
+
+    private void promocion(){
+        if(mouse.presionado){
+            for(Pieza pieza : piezasPromociones){
+                if(pieza.columna == mouse.x/Tablero.TAMANO_CUADRADO && pieza.fila == mouse.y/Tablero.TAMANO_CUADRADO){
+                    switch (pieza.tipoPieza){
+                        case TORRE: sPiezas.add(new Torre(colorActual,piezaActiva.columna,piezaActiva.fila)); break;
+                        case CABALLO: sPiezas.add(new Caballo(colorActual,piezaActiva.columna,piezaActiva.fila)); break;
+                        case ALFIL: sPiezas.add(new Alfil(colorActual,piezaActiva.columna,piezaActiva.fila)); break;
+                         case REINA: sPiezas.add(new Reina(colorActual,piezaActiva.columna,piezaActiva.fila)); break;
+                        default: break;
+                    }
+                    sPiezas.remove(piezaActiva.getIndice());
+                    copiarPiezas(sPiezas,piezas);
+                    piezaActiva = null;
+                    promover = false;
+                    cambioJugador();
+                }
+            }
         }
     }
 
+    private boolean esIlegal(Pieza rey){
+        if(rey.tipoPieza == Tipo.REY){
+            for(Pieza pieza : sPiezas){
+                if(pieza != rey && pieza.color != rey.color && pieza.puedeMoverse(rey.columna,rey.fila)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     @Override
     public void run() {
         //loop del juego
@@ -188,6 +252,20 @@ public class GUI extends JPanel implements Runnable{
                 delta--;
             }
         }
+    }
+
+    private boolean promoverPieza(){
+        if(piezaActiva.tipoPieza == Tipo.PEON){
+            if(colorActual == BLANCO && piezaActiva.fila == 0 || colorActual == NEGRO && piezaActiva.fila == 7){
+                piezasPromociones.clear();
+                piezasPromociones.add(new Torre(colorActual,9,2));
+                piezasPromociones.add(new Caballo(colorActual,9,3));
+                piezasPromociones.add(new Alfil(colorActual,9,4));
+                piezasPromociones.add(new Reina(colorActual,9,5));
+                return true;
+            }
+        }
+        return false;
     }
     private void revisarEnroque(){
         if(pEnroque != null){
