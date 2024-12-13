@@ -1,0 +1,141 @@
+@startuml
+class Torre {
+    +Torre(color: int, columna: int, fila: int)
+    + puedeMoverse(columnaObjetivo : int, filaObjetivo : int) : boolean
+}
+class Tablero {
+    {static} {final} MAX_COLUMNAS : int = 8
+    {static} {final} MAX_FILAS : int = 8
+    {static} {final} TAMANO_CUADRADO : int = 100
+    {static} {final} MITAD_CUADRADO : int = 50
+
+    + draw(Graphics2D : g2) : void
+}
+class Rey {
+    +Rey(color: int, columna: int, fila: int)
+    + puedeMoverse(columnaObjetivo : int, filaObjetivo : int) : boolean
+
+}
+class Reina {
+    +Reina(color: int, columna: int, fila: int)
+    + puedeMoverse(columnaObjetivo : int, filaObjetivo : int) : boolean
+}
+class Pieza {
+    + Tipo tipoPieza
+    + BufferedImage imagen
+    + int x
+    + int y
+    + int columna
+    + int fila
+    + int columnaPrevia
+    + int filaPrevia
+    + int color
+    + Pieza chocaPieza
+    + boolean mover
+    + boolean dosPasos
+
+    + Pieza(int color, int columna, int fila)
+    + getImagen(String rutaImagen) : BufferedImage
+    + posicionX(columna: int): int
+    + posicionY(fila: int): int
+    + getColumna(x: int): int
+    + getFila(y: int): int
+    + getIndice(): int
+    + actualizarPosicion() : void
+    + puedeMoverse(int columnaObjetivo, int filaObjetivo) : boolean
+    + dentroTablero(int columnaObjetivo, int filaObjetivo) : boolean
+    + reiniciarPosicion() : void
+    + getChocaPieza(int columnaObjetivo, int filaObjetivo) : Pieza
+    + esElMismoCuadrado(int columnaObjetivo, int filaObjetivo) : boolean
+    + piezaEstaEnRecta(int columnaObjetivo, int filaObjetivo) : boolean
+    + piezaEstaEnDiagonal(int columnaObjetivo, int filaObjetivo) : boolean
+    + cuadradoValido(int columnaObjetivo, int filaObjetivo) :boolean
+    + dibujar(Graphics2D g2) : void
+    + enLaTabla(int columnOnj, int filaObj) : boolean
+}
+class Peon {
+    + Peon(int color, int columna, int fila)
+    + puedeMoverse(int columnaObjetivo, int filaObjetivo) : boolean
+}
+
+class Mouse {
+    + int x
+    + int y
+    + boolean presionado
+
+    + mousePressed(MouseEvent e) : void
+    + mouseReleased(MouseEvent e) : void
+    + mouseDragged(MouseEvent e) : void
+    + mouseMoved(MouseEvent e) : void
+}
+class Main {
+    + main(String[] args) : void
+}
+class GUI{
+    +ANCHO: final int
+    +ALTO: final int
+    +FPS: final int
+    +gameThread: Thread
+    +tablero: Tablero
+    +mouse: Mouse
+    +piezas: ArrayList<Pieza>
+    +sPiezas: ArrayList<Pieza>
+    +piezaActiva: Pieza
+    +{static} pEnroque: Pieza
+    +BLANCO: final int
+    +NEGRO: final int
+    -colorActual: int
+    -moverse: boolean
+    -esValido: boolean
+
+    +GUI()
+    -actualizar(): void
+    -cambioJugador(): void
+    -simular(): void
+    +lanzarJuego() : void
+    -copiarPiezas(piezas: ArrayList<Pieza>, sPiezas: ArrayList<Pieza>): void
+    +paintComponent(g: Graphics): void
+    +run(): void
+}
+
+class Caballo{
+    +Caballo(color: int, columna: int, fila: int)
+    +puedeMoverse(columnaObjetivo: int, filaObjetivo: int): boolean
+}
+class Alfil {
+    +Alfil(color: int, columna: int, fila: int)
+    +puedeMoverse(columnaObjetivo: int, filaObjetivo: int): boolean
+}
+class Tipo{
+
+}
+
+
+Alfil --|> Pieza : "hereda de"
+Torre --|> Pieza : "hereda de"
+Caballo --|> Pieza : "hereda de"
+GUI --|> JPanel : "hereda de"
+Mouse --|> MouseAdapter : "hereda de"
+Peon --|> Pieza : "hereda de"
+Reina --|> Pieza : "hereda de"
+Rey --|> Pieza : "hereda de"
+GUI -|> Runnable : "implementa"
+
+Peon ..> GUI : ""
+Reina ..> GUI : ""
+Torre ..> GUI : ""
+Alfil ..> GUI : ""
+Rey ..> GUI : ""
+Caballo ..> GUI : ""
+Pieza ..> GUI : ""
+Mouse ..> GUI : ""
+Main ..> GUI : ""
+
+Pieza ..> Tablero : ""
+GUI ..> Tablero : ""
+
+
+
+
+
+@enduml
