@@ -91,7 +91,7 @@ public class Pieza {
         return false;
     }
 
-    public boolean piezaEstaEnLineaTensa(int columnaObjetivo, int filaObjetivo) {
+    public boolean piezaEstaEnRecta(int columnaObjetivo, int filaObjetivo) {
         //Cuando esta pieza se mueve a la izquierda
         for(int c = columnaPrevia - 1; c > columnaObjetivo; c--) {
             for(Pieza pieza : GUI.sPiezas) {
@@ -130,6 +130,58 @@ public class Pieza {
             }
         }
         return false;
+    }
+
+    public boolean piezaEstaEnDiagonal(int columnaObjetivo, int filaObjetivo) {
+
+        if(filaObjetivo < filaPrevia) {
+
+            //Arriba izquierda
+            for(int c = columnaPrevia - 1; c > columnaObjetivo; c--) {
+                int diff = Math.abs(c - columnaPrevia);
+                for(Pieza pieza : GUI.sPiezas) {
+                    if(pieza.columna == c && pieza.fila == filaPrevia - diff){
+                        chocaPieza = pieza;
+                        return true;
+                    }
+                }
+            }
+
+            //Arriba derecha
+            for(int c = columnaPrevia + 1; c < columnaObjetivo; c++) {
+                int diff = Math.abs(c - columnaPrevia);
+                for(Pieza pieza : GUI.sPiezas) {
+                    if(pieza.columna == c && pieza.fila == filaPrevia - diff){
+                        chocaPieza = pieza;
+                        return true;
+                    }
+                }
+            }
+        }
+        if(filaObjetivo > filaPrevia){
+            //Abajo izquierda
+            for(int c = columnaPrevia - 1; c > columnaObjetivo; c--) {
+                int diff = Math.abs(c - columnaPrevia);
+                for(Pieza pieza : GUI.sPiezas) {
+                    if(pieza.columna == c && pieza.fila == filaPrevia + diff){
+                        chocaPieza = pieza;
+                        return true;
+                    }
+                }
+            }
+            //Abajo derecha
+            for(int c = columnaPrevia + 1; c < columnaObjetivo; c++) {
+                int diff = Math.abs(c - columnaPrevia);
+                for(Pieza pieza : GUI.sPiezas) {
+                    if(pieza.columna == c && pieza.fila == filaPrevia + diff){
+                        chocaPieza = pieza;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+
     }
 
     public boolean cuadradoValido(int columnaObjetivo, int filaObjetivo){
