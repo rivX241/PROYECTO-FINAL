@@ -64,10 +64,7 @@ public class Pieza {
     }
 
     public boolean dentroTablero(int columnaObjetivo, int filaObjetivo){
-        if(columnaObjetivo >= 0 && columnaObjetivo <=7 && filaObjetivo >= 0 && filaObjetivo <=7){
-            return true;
-        }
-        return false;
+        return columnaObjetivo >= 0 && columnaObjetivo <= 7 && filaObjetivo >= 0 && filaObjetivo <= 7;
     }
 
     public void reiniciarPosicion(){
@@ -87,10 +84,7 @@ public class Pieza {
     }
 
     public boolean esElMismoCuadrado(int columnaObjetivo, int filaObjetivo) {
-        if(columnaObjetivo == columnaPrevia && filaObjetivo == filaPrevia) {
-            return true;
-        }
-        return false;
+        return columnaObjetivo == columnaPrevia && filaObjetivo == filaPrevia;
     }
 
     public boolean piezaEstaEnRecta(int columnaObjetivo, int filaObjetivo) {
@@ -206,9 +200,6 @@ public class Pieza {
     }
     /*Verificar si la pieza esta en la tabla */
     public boolean enLaTabla(int columnOnj, int filaObj){
-        if(columnOnj >= 0 && filaObj <= 7 && filaObj >= 0 && filaObj <= 7){
-            return true;
-        }
-        return false;
+        return columnOnj >= 0 && filaObj <= 7 && filaObj >= 0;
     }
 }

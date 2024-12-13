@@ -10,12 +10,10 @@ public class Torre extends Pieza{
         }
     }
     public boolean puedeMoverse(int columnaObjetivo, int filaObjetivo) {
-        if(dentroTablero(columnaObjetivo, filaObjetivo) && esElMismoCuadrado(columnaObjetivo, filaObjetivo) == false) {
+        if(dentroTablero(columnaObjetivo, filaObjetivo) && !esElMismoCuadrado(columnaObjetivo, filaObjetivo)) {
             //Las torres pueden moverse siempre que su columna o fila sean las mismas.
             if(columnaObjetivo == columnaPrevia || filaObjetivo == filaPrevia) {
-                if(cuadradoValido(columnaObjetivo, filaObjetivo) && piezaEstaEnRecta(columnaObjetivo, filaObjetivo) == false) {
-                    return true;
-                }
+                return cuadradoValido(columnaObjetivo, filaObjetivo) && !piezaEstaEnRecta(columnaObjetivo, filaObjetivo);
             }
         }
         return false;
