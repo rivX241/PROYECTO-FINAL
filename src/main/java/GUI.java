@@ -42,7 +42,7 @@ public class GUI extends JPanel implements Runnable{
 
         if(promover){
             promocion();
-        }else{
+        }else if(!juegoTerminado){
             //Selección de la pieza activa según el clic del ratón
             if(mouse.presionado){
                 if(piezaActiva == null){
@@ -67,13 +67,14 @@ public class GUI extends JPanel implements Runnable{
                         if(pEnroque != null){
                             pEnroque.actualizarPosicion();
                         }
-                        if(reyEnJaque()){
-
-                        }
-                        if(promoverPieza()){
-                            promover = true;
+                        if(reyEnJaque() && esJaqueMate()){
+                            juegoTerminado = true;
                         }else{
-                            cambioJugador();
+                            if(promoverPieza()){
+                                promover = true;
+                            }else{
+                                cambioJugador();
+                            }
                         }
 
                     }else{
@@ -336,7 +337,18 @@ public class GUI extends JPanel implements Runnable{
                 }
             }
         }
+        if(juegoTerminado){
+            String s = "";
+            if(colorActual == BLANCO){
+                s = "Blancas ganan";
+            }else{
+                s = "Negras ganan";
+            }
+            g2.setFont(new Font("Arial",Font.BOLD,100));
+            g2.setColor(Color.blue);
 
+            g2.drawString(s,200,430);
+        }
     }
 
     private void promocion(){
