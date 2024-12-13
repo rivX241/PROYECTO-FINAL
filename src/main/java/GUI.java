@@ -53,6 +53,7 @@ public class GUI extends JPanel implements Runnable{
                 if(esValido){
                     copiarPiezas(sPiezas,piezas);
                     piezaActiva.actualizarPosicion();
+                    cambioJugador();
                 }else{
                     copiarPiezas(piezas,sPiezas);
                     piezaActiva.reiniciarPosicion();
@@ -60,6 +61,15 @@ public class GUI extends JPanel implements Runnable{
                 }
             }
         }
+    }
+
+    private void cambioJugador(){
+        if(colorActual == BLANCO){
+            colorActual = NEGRO;
+        }else{
+            colorActual = BLANCO;
+        }
+        piezaActiva = null;
     }
     private void simular(){
 
@@ -115,6 +125,16 @@ public class GUI extends JPanel implements Runnable{
 
             }
             piezaActiva.dibujar(g2);
+        }
+
+        g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setFont(new Font("Arial",Font.BOLD,35));
+        g2.setColor(Color.white);
+
+        if(colorActual == BLANCO){
+            g2.drawString("Turno:Blancas",840,550);
+        }else{
+            g2.drawString("Turno:Negras",840,250);
         }
     }
 
