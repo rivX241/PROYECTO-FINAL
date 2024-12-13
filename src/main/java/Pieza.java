@@ -91,6 +91,47 @@ public class Pieza {
         return false;
     }
 
+    public boolean piezaEstaEnLineaTensa(int columnaObjetivo, int filaObjetivo) {
+        //Cuando esta pieza se mueve a la izquierda
+        for(int c = columnaPrevia - 1; c > columnaObjetivo; c--) {
+            for(Pieza pieza : GUI.sPiezas) {
+                if(pieza.columna == c && pieza.fila == filaObjetivo) {
+                    chocaPieza = pieza;}
+                    return true;
+                }
+            }
+
+        //Cuando esta pieza se mueve a la derecha
+        for(int c = columnaPrevia + 1; c < columnaObjetivo; c++) {
+            for(Pieza pieza : GUI.sPiezas) {
+                if(pieza.columna == c && pieza.fila == filaObjetivo) {
+                    chocaPieza = pieza;
+                    return true;
+                }
+            }
+        }
+        //Cuando esta pieza se mueve a la arriba
+        for(int r = filaPrevia - 1; r > filaObjetivo; r--) {
+            for(Pieza pieza : GUI.sPiezas) {
+                if(pieza.columna == filaObjetivo && pieza.fila == r) {
+                    chocaPieza = pieza;
+                    return true;
+                }
+            }
+        }
+
+        //Cuando esta pieza se mueve a la arriba
+        for(int r = filaPrevia + 1; r < filaObjetivo; r++) {
+            for(Pieza pieza : GUI.sPiezas) {
+                if(pieza.columna == filaObjetivo && pieza.fila == r) {
+                    chocaPieza = pieza;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public boolean cuadradoValido(int columnaObjetivo, int filaObjetivo){
         chocaPieza = getChocaPieza(columnaObjetivo, filaObjetivo);
         if(chocaPieza == null){
