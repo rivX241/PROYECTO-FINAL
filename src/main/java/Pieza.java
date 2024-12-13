@@ -87,7 +87,7 @@ public class Pieza {
     }
 
     public boolean esElMismoCuadrado(int columnaObjetivo, int filaObjetivo) {
-        if(filaObjetivo == columnaPrevia && filaObjetivo == filaPrevia) {
+        if(columnaObjetivo == columnaPrevia && filaObjetivo == filaPrevia) {
             return true;
         }
         return false;
@@ -98,10 +98,11 @@ public class Pieza {
         for(int c = columnaPrevia - 1; c > columnaObjetivo; c--) {
             for(Pieza pieza : GUI.sPiezas) {
                 if(pieza.columna == c && pieza.fila == filaObjetivo) {
-                    chocaPieza = pieza;}
+                    chocaPieza = pieza;
                     return true;
                 }
             }
+        }
 
         //Cuando esta pieza se mueve a la derecha
         for(int c = columnaPrevia + 1; c < columnaObjetivo; c++) {
