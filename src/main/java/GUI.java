@@ -15,7 +15,7 @@ public class GUI extends JPanel implements Runnable{
     public static ArrayList<Pieza> sPiezas = new ArrayList<>();
     ArrayList<Pieza> piezasPromociones = new ArrayList<>();
 
-    Pieza piezaActiva;
+    Pieza piezaActiva,pJaque;
     public static Pieza pEnroque;
 
     //Colores
@@ -27,6 +27,7 @@ public class GUI extends JPanel implements Runnable{
     boolean moverse;
     boolean esValido;
     boolean promover;
+    boolean juegoTerminado;
 
     public GUI() {
         setPreferredSize(new Dimension(ANCHO, ALTO));
@@ -66,11 +67,15 @@ public class GUI extends JPanel implements Runnable{
                         if(pEnroque != null){
                             pEnroque.actualizarPosicion();
                         }
+                        if(reyEnJaque()){
+
+                        }
                         if(promoverPieza()){
                             promover = true;
                         }else{
                             cambioJugador();
                         }
+
                     }else{
                         //Si el movimiento no es válido, restablece la posición original
                         copiarPiezas(piezas,sPiezas);
@@ -131,7 +136,7 @@ public class GUI extends JPanel implements Runnable{
             }
 
             revisarEnroque();   //Verifica si se puede hacer enroque
-            if(esIlegal(piezaActiva) == false){  //Verifica si el rey hace un movimiento ilegal
+            if(!esIlegal(piezaActiva) && !oponentePuedeCapturarRey()){  //Verifica si el rey hace un movimiento ilegal
                 esValido = true;   //El movimiento es válido
             }
         }
@@ -160,7 +165,7 @@ public class GUI extends JPanel implements Runnable{
         }
         if(piezaActiva != null){
             if(moverse){
-                if(esIlegal(piezaActiva)){
+                if(esIlegal(piezaActiva) || oponentePuedeCapturarRey()){
                     g2.setColor(Color.gray);
                     g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.65f));
                     g2.fillRect(piezaActiva.columna*Tablero.TAMANO_CUADRADO,
@@ -194,8 +199,18 @@ public class GUI extends JPanel implements Runnable{
         }else{
             if(colorActual == BLANCO){
                 g2.drawString("Turno:Blancas",840,550);
+                if(pJaque != null && pJaque.color == NEGRO){
+                    g2.setColor(Color.red);
+                    g2.drawString("Rey",840,640);
+                    g2.drawString("en Jaque",840,700);
+                }
             }else{
                 g2.drawString("Turno:Negras",840,250);
+                if(pJaque != null && pJaque.color == BLANCO){
+                    g2.setColor(Color.red);
+                    g2.drawString("Rey",840,110);
+                    g2.drawString("en Jaque",840,160);
+                }
             }
         }
 
@@ -228,6 +243,18 @@ public class GUI extends JPanel implements Runnable{
                 if(pieza != rey && pieza.color != rey.color && pieza.puedeMoverse(rey.columna,rey.fila)){
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    private boolean oponentePuedeCapturarRey(){
+
+        Pieza rey = getRey(false);
+
+        for(Pieza pieza : sPiezas){
+            if(pieza.color != rey.color && pieza.puedeMoverse(rey.columna,rey.fila)){
+                return true;
             }
         }
         return false;
@@ -279,6 +306,35 @@ public class GUI extends JPanel implements Runnable{
         }
     }
 
+    private boolean reyEnJaque(){
+        Pieza rey = getRey(true);
+
+        if(piezaActiva.puedeMoverse(rey.columna,rey.fila)){
+            pJaque = piezaActiva;
+            return true;
+        }else{
+            pJaque = null;
+        }
+
+        return false;
+    }
+
+    private Pieza getRey(boolean rival){
+        Pieza rey = null;
+
+        for(Pieza pieza :sPiezas){
+            if(rival){
+                if(pieza.tipoPieza == Tipo.REY && pieza.color != colorActual){
+                    rey = pieza;
+                }
+            }else{
+                if(pieza.tipoPieza == Tipo.REY && pieza.color == colorActual){
+                    rey = pieza;
+                }
+            }
+        }
+        return rey;
+    }
     public void configurarPiezas() {
         piezas.add(new Peon(BLANCO, 0, 6));
         piezas.add(new Peon(BLANCO, 1, 6));
