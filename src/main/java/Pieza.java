@@ -116,7 +116,7 @@ public class Pieza {
         //Cuando esta pieza se mueve a la arriba
         for(int r = filaPrevia - 1; r > filaObjetivo; r--) {
             for(Pieza pieza : GUI.sPiezas) {
-                if(pieza.columna == filaObjetivo && pieza.fila == r) {
+                if(pieza.columna == columnaObjetivo && pieza.fila == r) {
                     chocaPieza = pieza;
                     return true;
                 }
@@ -126,7 +126,7 @@ public class Pieza {
         //Cuando esta pieza se mueve a la arriba
         for(int r = filaPrevia + 1; r < filaObjetivo; r++) {
             for(Pieza pieza : GUI.sPiezas) {
-                if(pieza.columna == filaObjetivo && pieza.fila == r) {
+                if(pieza.columna == columnaObjetivo && pieza.fila == r) {
                     chocaPieza = pieza;
                     return true;
                 }
