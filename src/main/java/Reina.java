@@ -21,7 +21,7 @@ public class Reina extends Pieza{
             
 
             //Diagonal
-            if(Math.abs(columnaObjetivo - columnaPrevia) == Math.abs(filaObjetivo - columnaPrevia)) {
+            if(Math.abs(columnaObjetivo - columnaPrevia) == Math.abs(filaObjetivo - filaPrevia)) {
                 if(cuadradoValido(columnaObjetivo, filaObjetivo) && !piezaEstaEnDiagonal(columnaObjetivo, filaObjetivo)) {
                     return true;
                 }
