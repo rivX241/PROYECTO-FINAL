@@ -35,20 +35,22 @@ public class GUI extends JPanel implements Runnable{
         copiarPiezas(piezas,sPiezas);
     }
     private void actualizar(){
+        //Selección de la pieza activa según el clic del ratón
         if(mouse.presionado){
             if(piezaActiva == null){
 
                 for(Pieza pieza : sPiezas){
                     if(pieza.color == colorActual && pieza.columna == mouse.x/Tablero.TAMANO_CUADRADO &&
                         pieza.fila == mouse.y/Tablero.TAMANO_CUADRADO){
-                        piezaActiva = pieza;
+                        piezaActiva = pieza;//Activar pieza seleccionada
                     }
                 }
             }else{
+                //Simula el movimiento de la pieza activa
                 simular();
             }
         }
-
+        //Si el movimiento es válido, actualiza la posición de las piezas
         if(!mouse.presionado){
             if(piezaActiva != null){
                 if(esValido){
@@ -59,6 +61,7 @@ public class GUI extends JPanel implements Runnable{
                     }
                     cambioJugador();
                 }else{
+                    //Si el movimiento no es válido, restablece la posición original
                     copiarPiezas(piezas,sPiezas);
                     piezaActiva.reiniciarPosicion();
                     piezaActiva = null;
@@ -69,53 +72,54 @@ public class GUI extends JPanel implements Runnable{
 
     private void cambioJugador(){
         if(colorActual == BLANCO){
-            colorActual = NEGRO;
-            //reiniciar estado de dos pasos
+            colorActual = NEGRO; //Cambia al turno de las piezas negras
+             //Reinicia el estado de las piezas blancas
             for(Pieza pieza : piezas){
                 if(pieza.color == NEGRO){
-                    pieza.dosPasos = false;
+                    pieza.dosPasos = false; //Restablece el flag de movimiento de dos pasos para las piezas negras
                 }
             }
         }else{
-            colorActual = BLANCO;
+            colorActual = BLANCO;//Cambia al turno de las piezas blancas
 
             for(Pieza pieza : piezas){
                 if(pieza.color == BLANCO){
-                    pieza.dosPasos = false;
+                    pieza.dosPasos = false; // Restablece el flag de movimiento de dos pasos para las piezas blancas
                 }
             }
         }
-        piezaActiva = null;
+        piezaActiva = null;//Resetea la pieza activa
     }
     private void simular(){
 
          moverse = false;
          esValido = false;
 
-         copiarPiezas(piezas,sPiezas);
+         copiarPiezas(piezas,sPiezas);//Copia el estado actual de las piezas
          //Resetear la posicion de torres en el momento del enroque
 
         if(pEnroque != null){
             pEnroque.columna = pEnroque.columnaPrevia;
             pEnroque.x = pEnroque.getColumna(pEnroque.columna);
-            pEnroque = null;
+            pEnroque = null;//Termina el enroque
         }
-
+        //Actualiza la posición de la pieza activa a la nueva posición del ratón
         piezaActiva.x = mouse.x - Tablero.MITAD_CUADRADO;
         piezaActiva.y = mouse.y - Tablero.MITAD_CUADRADO;
         piezaActiva.columna = piezaActiva.getColumna(piezaActiva.x);
         piezaActiva.fila = piezaActiva.getFila(piezaActiva.y);
-
+        
+        //Verifica si el movimiento es válido
         if(piezaActiva.puedeMoverse(piezaActiva.columna, piezaActiva.fila)){
             moverse = true;
 
             if(piezaActiva.chocaPieza != null){
-                 sPiezas.remove(piezaActiva.chocaPieza.getIndice());
+                 sPiezas.remove(piezaActiva.chocaPieza.getIndice());    //Elimina la pieza capturada
             }
 
-            revisarEnroque();
+            revisarEnroque();   //Verifica si se puede hacer enroque
 
-            esValido = true;
+            esValido = true;    //El movimiento es válido
         }
     }
 
