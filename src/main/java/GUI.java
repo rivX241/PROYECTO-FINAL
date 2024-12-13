@@ -344,14 +344,14 @@ public class GUI extends JPanel implements Runnable{
         piezas.add(new Peon(BLANCO, 5, 6));
         piezas.add(new Peon(BLANCO, 6, 6));
         piezas.add(new Peon(BLANCO, 7, 6));
-        //piezas.add(new Alfil(BLANCO,2, 7));
-        //piezas.add(new Alfil(BLANCO,5,7));
-        //piezas.add(new Caballo(BLANCO,1,7));
-        //piezas.add(new Caballo(BLANCO,6,7));
+        piezas.add(new Alfil(BLANCO,2, 7));
+        piezas.add(new Alfil(BLANCO,5,7));
+        piezas.add(new Caballo(BLANCO,1,7));
+        piezas.add(new Caballo(BLANCO,6,7));
         piezas.add(new Torre(BLANCO,0,7));
         piezas.add(new Torre(BLANCO,7,7));
         piezas.add(new Rey(BLANCO,4,7));
-        //piezas.add(new Reina(BLANCO,3,7));
+        piezas.add(new Reina(BLANCO,3,7));
 
 
         piezas.add(new Peon(NEGRO,0,1));
