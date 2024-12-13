@@ -10,7 +10,7 @@ public class Caballo extends Pieza{
         }
     }
 
-    public boolean moverse(int columnaObjetivo,int filaObjetivo){
+    public boolean puedeMoverse(int columnaObjetivo, int filaObjetivo){
         if(dentroTablero(columnaObjetivo,filaObjetivo)){
             if(Math.abs(columnaObjetivo-columnaPrevia)*Math.abs(filaObjetivo-filaPrevia) == 2){
                 if(cuadradoValido(columnaObjetivo,filaObjetivo)){

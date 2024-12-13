@@ -82,7 +82,7 @@ public class GUI extends JPanel implements Runnable{
          piezaActiva.y = mouse.y - Tablero.MITAD_CUADRADO;
          piezaActiva.columna = piezaActiva.getColumna(piezaActiva.x);
          piezaActiva.fila = piezaActiva.getFila(piezaActiva.y);
-         if(piezaActiva.moverse(piezaActiva.columna, piezaActiva.fila)){
+         if(piezaActiva.puedeMoverse(piezaActiva.columna, piezaActiva.fila)){
              moverse = true;
 
              if(piezaActiva.chocaPieza != null){
