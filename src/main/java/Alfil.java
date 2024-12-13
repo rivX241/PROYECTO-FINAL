@@ -9,4 +9,14 @@ public class Alfil extends Pieza{
             imagen = getImagen("/sprites/alfilNegro");
         }
     }
+    public boolean puedeMoverse(int columnaObjetivo, int filaObjetivo) {
+        if(dentroTablero(columnaObjetivo, filaObjetivo) && esElMismoCuadrado(columnaObjetivo, filaObjetivo) == false) {
+            if(Math.abs(columnaObjetivo - columnaPrevia) == Math.abs(filaObjetivo - filaPrevia)) {
+                if(cuadradoValido(columnaObjetivo, filaObjetivo) && piezaEstaEnDiagonal(columnaObjetivo, filaObjetivo) == false) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
