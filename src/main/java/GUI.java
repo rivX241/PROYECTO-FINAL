@@ -14,6 +14,8 @@ public class GUI extends JPanel implements Runnable{
     public static ArrayList<Pieza> piezas = new ArrayList<>();
     public static ArrayList<Pieza> sPiezas = new ArrayList<>();
     Pieza piezaActiva;
+    Pieza pEnroque;
+
     //Colores
     public static final int BLANCO = 0;
     public static final int NEGRO = 1;
