@@ -3,6 +3,8 @@ public class Reina extends Pieza{
     public Reina(int color,int columna,int fila){
         super(color,columna,fila);
 
+        tipoPieza = Tipo.REINA;
+
         if(color == GUI.BLANCO){
             imagen = getImagen("/sprites/reinaBlanca");
         }else if(color == GUI.NEGRO){

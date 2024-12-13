@@ -70,8 +70,20 @@ public class GUI extends JPanel implements Runnable{
     private void cambioJugador(){
         if(colorActual == BLANCO){
             colorActual = NEGRO;
+            //reiniciar estado de dos pasos
+            for(Pieza pieza : piezas){
+                if(pieza.color == NEGRO){
+                    pieza.dosPasos = false;
+                }
+            }
         }else{
             colorActual = BLANCO;
+
+            for(Pieza pieza : piezas){
+                if(pieza.color == BLANCO){
+                    pieza.dosPasos = false;
+                }
+            }
         }
         piezaActiva = null;
     }

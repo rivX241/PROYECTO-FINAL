@@ -3,12 +3,13 @@ import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
 public class Pieza {
+    public Tipo tipoPieza;
     public BufferedImage imagen;
     public int x, y;
     public int columna,fila,columnaPrevia,filaPrevia;
     public int color;
     public Pieza chocaPieza;
-    public boolean mover;
+    public boolean mover,dosPasos;
 
     public Pieza(int color, int columna,int fila) {
         this.color = color;
@@ -52,6 +53,12 @@ public class Pieza {
     }
     public void actualizarPosicion(){
 
+        //revisar captura al paso
+        if(tipoPieza == Tipo.PEON){
+            if(Math.abs(fila-filaPrevia) == 2){
+                dosPasos = true;
+            }
+        }
         x= posicionX(columna);
         y= posicionY(fila);
         columnaPrevia = getColumna(x);
