@@ -9,7 +9,7 @@ public class Reina extends Pieza{
             imagen = getImagen("/sprites/reinaNegra");
         }
     }
-    public puedeMoverse(int columnaObjetivo, int filaObjetivo) {
+    public boolean puedeMoverse(int columnaObjetivo, int filaObjetivo) {
         //Vertical y horizontal
         if(dentroTablero(columnaObjetivo, filaObjetivo) && esElMismoCuadrado(columnaObjetivo, filaObjetivo) == false) {
             if(cuadradoValido(columnaObjetivo, filaObjetivo) && piezaEstaEnRecta(columnaObjetivo, filaObjetivo)) {
@@ -18,7 +18,10 @@ public class Reina extends Pieza{
         }
         //Diagonal
         if(Math.abs(columnaObjetivo - columnaPrevia) == Math.abs(filaObjetivo - columnaPrevia)) {
-            if(cuadradoValido(columnaObjetivo, filaObjetivo) && )
+            if(cuadradoValido(columnaObjetivo, filaObjetivo) && piezaEstaEnDiagonal(columnaObjetivo, filaObjetivo)) {
+                return true;
+            }
         }
+        return false;
     }
 }
