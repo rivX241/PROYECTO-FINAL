@@ -3,6 +3,8 @@ public class Alfil extends Pieza{
     public Alfil(int color,int columna,int fila){
         super(color,columna,fila);
 
+        tipoPieza = Tipo.ALFIL;
+
         if(color == GUI.BLANCO){
             imagen = getImagen("/sprites/alfilBlanco");
         }else if(color == GUI.NEGRO){

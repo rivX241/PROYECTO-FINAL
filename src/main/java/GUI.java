@@ -14,7 +14,7 @@ public class GUI extends JPanel implements Runnable{
     public static ArrayList<Pieza> piezas = new ArrayList<>();
     public static ArrayList<Pieza> sPiezas = new ArrayList<>();
     Pieza piezaActiva;
-    Pieza pEnroque;
+    public static Pieza pEnroque;
 
     //Colores
     public static final int BLANCO = 0;
@@ -33,7 +33,6 @@ public class GUI extends JPanel implements Runnable{
 
         configurarPiezas();
         copiarPiezas(piezas,sPiezas);
-
     }
     private void actualizar(){
         if(mouse.presionado){
@@ -55,6 +54,9 @@ public class GUI extends JPanel implements Runnable{
                 if(esValido){
                     copiarPiezas(sPiezas,piezas);
                     piezaActiva.actualizarPosicion();
+                    if(pEnroque != null){
+                        pEnroque.actualizarPosicion();
+                    }
                     cambioJugador();
                 }else{
                     copiarPiezas(piezas,sPiezas);
@@ -68,8 +70,20 @@ public class GUI extends JPanel implements Runnable{
     private void cambioJugador(){
         if(colorActual == BLANCO){
             colorActual = NEGRO;
+            //reiniciar estado de dos pasos
+            for(Pieza pieza : piezas){
+                if(pieza.color == NEGRO){
+                    pieza.dosPasos = false;
+                }
+            }
         }else{
             colorActual = BLANCO;
+
+            for(Pieza pieza : piezas){
+                if(pieza.color == BLANCO){
+                    pieza.dosPasos = false;
+                }
+            }
         }
         piezaActiva = null;
     }
@@ -79,20 +93,30 @@ public class GUI extends JPanel implements Runnable{
          esValido = false;
 
          copiarPiezas(piezas,sPiezas);
+         //Resetear la posicion de torres en el momento del enroque
 
-         piezaActiva.x = mouse.x - Tablero.MITAD_CUADRADO;
-         piezaActiva.y = mouse.y - Tablero.MITAD_CUADRADO;
-         piezaActiva.columna = piezaActiva.getColumna(piezaActiva.x);
-         piezaActiva.fila = piezaActiva.getFila(piezaActiva.y);
-         if(piezaActiva.puedeMoverse(piezaActiva.columna, piezaActiva.fila)){
-             moverse = true;
+        if(pEnroque != null){
+            pEnroque.columna = pEnroque.columnaPrevia;
+            pEnroque.x = pEnroque.getColumna(pEnroque.columna);
+            pEnroque = null;
+        }
 
-             if(piezaActiva.chocaPieza != null){
+        piezaActiva.x = mouse.x - Tablero.MITAD_CUADRADO;
+        piezaActiva.y = mouse.y - Tablero.MITAD_CUADRADO;
+        piezaActiva.columna = piezaActiva.getColumna(piezaActiva.x);
+        piezaActiva.fila = piezaActiva.getFila(piezaActiva.y);
+
+        if(piezaActiva.puedeMoverse(piezaActiva.columna, piezaActiva.fila)){
+            moverse = true;
+
+            if(piezaActiva.chocaPieza != null){
                  sPiezas.remove(piezaActiva.chocaPieza.getIndice());
-             }
-             esValido = true;
-         }
+            }
 
+            revisarEnroque();
+
+            esValido = true;
+        }
     }
 
     public void lanzarJuego(){
@@ -103,8 +127,8 @@ public class GUI extends JPanel implements Runnable{
     private void copiarPiezas(ArrayList<Pieza> recurso,ArrayList<Pieza> objetivo){
         objetivo.clear();
 
-        for(int i = 0; i < recurso.size(); i++){
-            objetivo.add(recurso.get(i));
+        for (Pieza pieza : recurso) {
+            objetivo.add(pieza);
         }
     }
     public void paintComponent(Graphics g){
@@ -161,6 +185,18 @@ public class GUI extends JPanel implements Runnable{
             }
         }
     }
+    private void revisarEnroque(){
+        if(pEnroque != null){
+            if(pEnroque.columna == 0){
+                pEnroque.columna += 3;
+            }else if(pEnroque.columna == 7){
+                pEnroque.columna -= 2;
+            }
+            pEnroque.x = pEnroque.posicionX(pEnroque.columna);
+
+        }
+    }
+
     public void configurarPiezas() {
         piezas.add(new Peon(BLANCO, 0, 6));
         piezas.add(new Peon(BLANCO, 1, 6));
@@ -170,14 +206,14 @@ public class GUI extends JPanel implements Runnable{
         piezas.add(new Peon(BLANCO, 5, 6));
         piezas.add(new Peon(BLANCO, 6, 6));
         piezas.add(new Peon(BLANCO, 7, 6));
-        piezas.add(new Alfil(BLANCO,2, 7));
-        piezas.add(new Alfil(BLANCO,5,7));
-        piezas.add(new Caballo(BLANCO,1,7));
-        piezas.add(new Caballo(BLANCO,6,7));
+        //piezas.add(new Alfil(BLANCO,2, 7));
+        //piezas.add(new Alfil(BLANCO,5,7));
+        //piezas.add(new Caballo(BLANCO,1,7));
+        //piezas.add(new Caballo(BLANCO,6,7));
         piezas.add(new Torre(BLANCO,0,7));
         piezas.add(new Torre(BLANCO,7,7));
-        piezas.add(new Rey(BLANCO,3,7));
-        piezas.add(new Reina(BLANCO,4,7));
+        piezas.add(new Rey(BLANCO,4,7));
+        //piezas.add(new Reina(BLANCO,3,7));
 
 
         piezas.add(new Peon(NEGRO,0,1));
