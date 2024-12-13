@@ -154,6 +154,129 @@ public class GUI extends JPanel implements Runnable{
             objetivo.add(pieza);
         }
     }
+
+    private boolean esJaqueMate(){
+
+        Pieza rey = getRey(true);
+        if(reyPuedeMoverse(rey)){
+            return false;
+        }else{
+            int columnaDiferencia = Math.abs(pJaque.columna - rey.columna);
+            int filaDiferencia = Math.abs(pJaque.fila - rey.fila);
+
+            if(columnaDiferencia == 0){
+                if(pJaque.fila < rey.fila){
+                    for(int fila = pJaque.fila;fila < rey.fila;fila++){
+                        for(Pieza pieza : sPiezas){
+                            if(pieza != rey && pieza.color != colorActual && pieza.puedeMoverse(pJaque.columna,fila)){
+                                return false;
+                            }
+                        }
+                    }
+                }
+                if(pJaque.fila > rey.fila){
+                    for(int fila = pJaque.fila;fila > rey.fila;fila--){
+                        for(Pieza pieza : sPiezas){
+                            if(pieza != rey && pieza.color != colorActual && pieza.puedeMoverse(pJaque.columna,fila)){
+                                return false;
+                            }
+                        }
+                    }
+                }
+            } else if (filaDiferencia == 0) {
+                if(pJaque.columna < rey.columna){
+                    for(int columna = pJaque.columna;columna < rey.columna;columna++){
+                        for(Pieza pieza : sPiezas){
+                            if(pieza != rey && pieza.color != colorActual && pieza.puedeMoverse(columna,pJaque.fila)){
+                                return false;
+                            }
+                        }
+                    }
+                }if(pJaque.columna > rey.columna){
+                    for(int columna = pJaque.columna;columna > rey.columna;columna--){
+                        for(Pieza pieza : sPiezas){
+                            if(pieza != rey && pieza.color != colorActual && pieza.puedeMoverse(columna,pJaque.fila)){
+                                return false;
+                            }
+                        }
+                    }
+                }
+            } else if (columnaDiferencia == filaDiferencia) {
+                if(pJaque.fila < rey.fila){
+                    if(pJaque.columna < rey.columna){
+                        for(int columna = pJaque.columna, fila = pJaque.fila;columna < rey.columna;columna++,fila++){
+                            for(Pieza pieza : sPiezas){
+                                if(pieza != rey && pieza.color != colorActual && pieza.puedeMoverse(columna,fila)){
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    if(pJaque.columna > rey.columna){
+                        for(int columna = pJaque.columna, fila = pJaque.fila;columna > rey.columna;columna--,fila++){
+                            for(Pieza pieza : sPiezas){
+                                if(pieza != rey && pieza.color != colorActual && pieza.puedeMoverse(columna,fila)){
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+                if(pJaque.fila > rey.fila){
+                    if(pJaque.columna < rey.columna){
+                        for(int columna = pJaque.columna, fila = pJaque.fila;columna < rey.columna;columna++,fila--){
+                            for(Pieza pieza : sPiezas){
+                                if(pieza != rey && pieza.color != colorActual && pieza.puedeMoverse(columna,fila)){
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                    if(pJaque.columna > rey.columna){
+                        for(int columna = pJaque.columna, fila = pJaque.fila;columna > rey.columna;columna--,fila--){
+                            for(Pieza pieza : sPiezas){
+                                if(pieza != rey && pieza.color != colorActual && pieza.puedeMoverse(columna,fila)){
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    private boolean reyPuedeMoverse(Pieza rey){
+        if(esMovimientoValido(rey,-1,-1)||esMovimientoValido(rey,0,-1)||
+                esMovimientoValido(rey,1,-1)||esMovimientoValido(rey,-1,0)
+                ||esMovimientoValido(rey,1,0)||esMovimientoValido(rey,-1,1)||
+                esMovimientoValido(rey,0,1)||esMovimientoValido(rey,1,1)){
+            return true;
+        }
+        return false;
+    }
+    private boolean esMovimientoValido(Pieza rey,int columnaExtra,int filaExtra){
+        boolean esMovimientoValido = false;
+
+        //Actualiza un segundo la posicion del rey
+        rey.columna += columnaExtra;
+        rey.fila += filaExtra;
+
+        if(rey.puedeMoverse(rey.columna,rey.fila)){
+            if(rey.chocaPieza != null){
+                sPiezas.remove(rey.chocaPieza.getIndice());
+            }
+            if(!esIlegal(rey)){
+                esMovimientoValido = true;
+            }
+        }
+
+        rey.reiniciarPosicion();
+        copiarPiezas(piezas,sPiezas);
+
+        return esMovimientoValido;
+    }
+
     public void paintComponent(Graphics g){
         super.paintComponent(g);
 
